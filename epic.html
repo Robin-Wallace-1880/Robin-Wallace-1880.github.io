@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Epic Dashboard</title>
+  <link rel="stylesheet" href="epic.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="title">Epic Dashboard</div>
+      <div class="subtitle">Sports • Finance • Calendar</div>
+    </div>
+    <div class="actions">
+      <button id="exportBtn" class="btn secondary">Export</button>
+      <label class="btn secondary filebtn">
+        Import <input id="importFile" type="file" accept="application/json" />
+      </label>
+      <button id="resetBtn" class="btn danger">Reset</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="sports">Sports</button>
+    <button class="tab" data-tab="finance">Finance</button>
+    <button class="tab" data-tab="calendar">Calendar</button>
+    <button class="tab" data-tab="overview">Overview</button>
+  </nav>
+
+  <main class="wrap">
+    <!-- SPORTS -->
+    <section class="panel active" id="tab-sports">
+      <div class="grid2">
+        <div class="card">
+          <h2>Log workout</h2>
+          <div class="form">
+            <label>Date <input id="wDate" type="date"></label>
+            <label>Sport
+              <select id="wSport">
+                <option>Squash</option>
+                <option>Bouldering</option>
+                <option>Weights</option>
+                <option>Yoga</option>
+                <option>Cycling</option>
+                <option>Running</option>
+                <option>Golf</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label>Minutes <input id="wMinutes" type="number" min="1" placeholder="60"></label>
+            <label>Intensity
+              <select id="wIntensity">
+                <option>Easy</option>
+                <option selected>Moderate</option>
+                <option>Hard</option>
+              </select>
+            </label>
+            <button id="addWorkoutBtn" class="btn">Add workout</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>This week</h2>
+          <div class="kpis">
+            <div class="kpi">
+              <div class="kpiLabel">Total minutes</div>
+              <div class="kpiValue" id="wkMinutes">—</div>
+            </div>
+            <div class="kpi">
+              <div class="kpiLabel">Sessions</div>
+              <div class="kpiValue" id="wkSessions">—</div>
+            </div>
+            <div class="kpi">
+              <div class="kpiLabel">Hard sessions</div>
+              <div class="kpiValue" id="wkHard">—</div>
+            </div>
+          </div>
+          <div class="chartWrap"><canvas id="sportsChart" height="140"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Recent workouts</h2>
+        <div id="workoutList" class="list"></div>
+      </div>
+    </section>
+
+    <!-- FINANCE -->
+    <section class="panel" id="tab-finance">
+      <div class="grid2">
+        <div class="card">
+          <h2>Portfolio snapshot</h2>
+          <div class="form">
+            <label>As of <input id="pDate" type="date"></label>
+            <label>Total value (CHF) <input id="pValue" type="number" min="0" placeholder="3000000"></label>
+            <label>Monthly savings (CHF) <input id="pMonthly" type="number" min="0" placeholder="5000"></label>
+            <button id="savePortfolioBtn" class="btn">Save snapshot</button>
+          </div>
+
+          <div class="kpis">
+            <div class="kpi">
+              <div class="kpiLabel">Total value</div>
+              <div class="kpiValue" id="kpiValue">—</div>
+            </div>
+            <div class="kpi">
+              <div class="kpiLabel">Monthly savings</div>
+              <div class="kpiValue" id="kpiMonthly">—</div>
+            </div>
+            <div class="kpi">
+              <div class="kpiLabel">Last updated</div>
+              <div class="kpiValue" id="kpiPDate">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Allocation</h2>
+          <div class="hint">Add lines like “World ETF, 65” meaning 65%.</div>
+          <textarea id="allocText" class="bigtext" placeholder="World ETF, 65&#10;EM ETF, 10&#10;CH, 15&#10;Cash, 10"></textarea>
+          <div class="row">
+            <button id="saveAllocBtn" class="btn secondary">Save allocation</button>
+          </div>
+          <div class="chartWrap"><canvas id="allocChart" height="180"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Notes</h2>
+        <textarea id="financeNotes" class="bigtext" placeholder="Any notes…"></textarea>
+        <div class="row">
+          <button id="saveFinanceNotesBtn" class="btn secondary">Save notes</button>
+          <span class="hint">Saved locally on this device.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR -->
+    <section class="panel" id="tab-calendar">
+      <div class="grid2">
+        <div class="card">
+          <h2>Add event</h2>
+          <div class="form">
+            <label>Date <input id="eDate" type="date"></label>
+            <label>Time <input id="eTime" type="time"></label>
+            <label>Title <input id="eTitle" type="text" placeholder="Squash league"></label>
+            <label>Location <input id="eLoc" type="text" placeholder="Oerlikon"></label>
+            <button id="addEventBtn" class="btn">Add event</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Next 14 days</h2>
+          <div id="eventList" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section class="panel" id="tab-overview">
+      <div class="grid2">
+        <div class="card">
+          <h2>At a glance</h2>
+          <div class="kpis">
+            <div class="kpi">
+              <div class="kpiLabel">This week minutes</div>
+              <div class="kpiValue" id="ovWkMin">—</div>
+            </div>
+            <div class="kpi">
+              <div class="kpiLabel">Next event</div>
+              <div class="kpiValue" id="ovNextEvent">—</div>
+            </div>
+            <div class="kpi">
+              <div class="kpiLabel">Portfolio (CHF)</div>
+              <div class="kpiValue" id="ovPort">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Quick notes</h2>
+          <textarea id="quickNotes" class="bigtext" placeholder="Anything…"></textarea>
+          <div class="row">
+            <button id="saveQuickBtn" class="btn secondary">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Sports trend (last 4 weeks)</h2>
+        <div class="chartWrap"><canvas id="trend4wChart" height="160"></canvas></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="epic.js"></script>
+</body>
+</html>
